@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+
+  reversproxy:
+    image: nginx
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+      - "8071:8071"
+      - "8072:8071"
+
+    volumes:
+      - ./nginx:/etc/nginx
+
+  web:
+    image: odoocustom:1
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8069"
+      - "8071"
+      - "8072"
+
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./odoo_log:/var/log/odoo
+      - ./odoo_config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+
+  db:
+    image: postgres:10
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+  odoo-web-log:
