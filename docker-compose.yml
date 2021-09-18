@@ -1,11 +1,12 @@
 version: '3.7'
 services:
 
-  reversproxy:
+  proxy:
     image: nginx
     restart: unless-stopped
     depends_on:
       - db
+      - web
     ports:
       - "80:80"
       - "8071:8071"
@@ -15,7 +16,7 @@ services:
       - ./nginx:/etc/nginx
 
   web:
-    image: odoocustom:1
+    image: odoo:13.0
     restart: unless-stopped
     depends_on:
       - db
