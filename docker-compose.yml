@@ -16,7 +16,7 @@ services:
       - ./nginx:/etc/nginx
 
   web:
-    image: odoo:13.0
+    image: odoo:15.0
     restart: unless-stopped
     depends_on:
       - db
@@ -32,7 +32,7 @@ services:
       - ./addons:/mnt/extra-addons
 
   db:
-    image: postgres:10
+    image: postgres:13
     ports:
       - "5432:5432"
     environment:
